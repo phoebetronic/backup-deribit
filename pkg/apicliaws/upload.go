@@ -12,11 +12,14 @@ import (
 )
 
 func (a *AWS) Upload(buc string, key string, rea bytes.Reader) error {
+	var log bool
+
 	{
 		inp := &s3.PutObjectInput{
 			Bucket: aws.String(buc),
 			Key:    aws.String(key),
 			Body: &Reader{
+				log: log,
 				rea: rea,
 				siz: rea.Size(),
 			},
@@ -28,7 +31,7 @@ func (a *AWS) Upload(buc string, key string, rea bytes.Reader) error {
 		}
 	}
 
-	{
+	if log {
 		fmt.Printf("\n")
 	}
 

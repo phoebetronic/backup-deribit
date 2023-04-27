@@ -22,7 +22,7 @@ func New() *Client {
 	}
 }
 
-func (c *Client) GetCandles(sta time.Time, end time.Time, ins string) ([]candle.Candle, error) {
+func (c *Client) Candles(sta time.Time, end time.Time, ins string) ([]candle.Candle, error) {
 	var err error
 
 	// We remove 1 nanosecond from the end time so that the end of the time
@@ -81,7 +81,7 @@ func (c *Client) GetCandles(sta time.Time, end time.Time, ins string) ([]candle.
 	can := make([]candle.Candle, len(dat.Result.Ticks))
 	for i, tick := range dat.Result.Ticks {
 		can[i] = candle.Candle{
-			Time:  time.Unix(0, tick*int64(time.Millisecond)),
+			Time:  time.UnixMilli(tick).UTC(),
 			Open:  dat.Result.Open[i],
 			High:  dat.Result.High[i],
 			Low:   dat.Result.Low[i],

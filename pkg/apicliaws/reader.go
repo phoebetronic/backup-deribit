@@ -7,6 +7,7 @@ import (
 )
 
 type Reader struct {
+	log bool
 	mux sync.Mutex
 	rea bytes.Reader
 	siz int64
@@ -23,10 +24,12 @@ func (r *Reader) ReadAt(byt []byte, off int64) (int, error) {
 		return num, err
 	}
 
-	r.mux.Lock()
-	r.tot += int64(num)
-	fmt.Printf("\ruploaded %d%%", int(float32(r.tot*100)/float32(r.siz)))
-	r.mux.Unlock()
+	if r.log {
+		r.mux.Lock()
+		r.tot += int64(num)
+		fmt.Printf("\ruploaded %d%%", int(float32(r.tot*100)/float32(r.siz)))
+		r.mux.Unlock()
+	}
 
 	return num, nil
 }
