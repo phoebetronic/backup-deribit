@@ -8,6 +8,7 @@ import (
 )
 
 type Writer struct {
+	log bool
 	siz int64
 	tot int64
 	wri *manager.WriteAtBuffer
@@ -16,7 +17,9 @@ type Writer struct {
 func (w *Writer) WriteAt(byt []byte, off int64) (int, error) {
 	atomic.AddInt64(&w.tot, int64(len(byt)))
 
-	fmt.Printf("\rbuffered %d%%", int(float32(w.tot*100)/float32(w.siz)))
+	if w.log {
+		fmt.Printf("\rbuffered %d%%", int(float32(w.tot*100)/float32(w.siz)))
+	}
 
 	return w.wri.WriteAt(byt, off)
 }

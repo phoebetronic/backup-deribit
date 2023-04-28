@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/phoebetronic/backup-deribit/cmd/dow"
 	"github.com/phoebetronic/backup-deribit/cmd/upl"
 	"github.com/phoebetronic/backup-deribit/cmd/ver"
 	"github.com/spf13/cobra"
@@ -17,6 +18,16 @@ func New() (*cobra.Command, error) {
 	var err error
 
 	// --------------------------------------------------------------------- //
+
+	var cmdDow *cobra.Command
+	{
+		c := dow.Config{}
+
+		cmdDow, err = dow.New(c)
+		if err != nil {
+			return nil, tracer.Mask(err)
+		}
+	}
 
 	var cmdUpl *cobra.Command
 	{
@@ -64,6 +75,7 @@ func New() (*cobra.Command, error) {
 	}
 
 	{
+		c.AddCommand(cmdDow)
 		c.AddCommand(cmdUpl)
 		c.AddCommand(cmdVer)
 	}
