@@ -11,6 +11,8 @@ import (
 )
 
 func (a *AWS) Download(buc string, key string) ([]byte, error) {
+	var log bool
+
 	var siz int64
 	{
 		inp := &s3.HeadObjectInput{
@@ -26,15 +28,16 @@ func (a *AWS) Download(buc string, key string) ([]byte, error) {
 		siz = out.ContentLength
 	}
 
-	{
+	if log {
 		fmt.Printf("fetching %s\n", a.siz(siz))
 	}
 
 	var wri *Writer
 	{
 		wri = &Writer{
-			wri: manager.NewWriteAtBuffer([]byte{}),
+			log: log,
 			siz: siz,
+			wri: manager.NewWriteAtBuffer([]byte{}),
 		}
 	}
 
@@ -50,7 +53,7 @@ func (a *AWS) Download(buc string, key string) ([]byte, error) {
 		}
 	}
 
-	{
+	if log {
 		fmt.Printf("\n")
 	}
 
